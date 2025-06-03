@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+
+    <color name="red_500">#F44336</color>
+    <color name="yellow_imdb">#F5C518</color>
+    <color name="material_dynamic_neutral20">#E0E0E0</color>
+    <color name="material_dynamic_neutral40">#BDBDBD</color>
+    <color name="material_dynamic_neutral60">#757575</color>
+    <color name="material_dynamic_neutral70">#616161</color>
+
+    <!-- Disney-inspired color palette -->
+    <color name="disney_blue">#1E88E5</color>
+    <color name="disney_blue_dark">#1565C0</color>
+    <color name="disney_purple">#7B1FA2</color>
+    <color name="disney_teal">#00BCD4</color>
+    <color name="disney_pink">#EC407A</color>
+    <color name="disney_yellow">#FFC107</color>
+    <color name="disney_background">#F5F8FF</color>
+    <color name="disney_text_primary">#263238</color>
+    <color name="disney_text_secondary">#455A64</color>
+</resources>
