@@ -403,7 +403,7 @@ We welcome contributions from the community! Here's how you can help:
 
 1. **Fork the Repository**
    ```bash
-   git fork https://github.com/yourusername/Automated-Face-Detection-Movie-Recommendation-App.git
+   git fork https://github.com/samyak2403/Automated-Face-Detection-Movie-Recommendation-App.git
    ```
 
 2. **Create Feature Branch**
@@ -433,7 +433,7 @@ We welcome contributions from the community! Here's how you can help:
 
 ### Reporting Issues
 
-Use the [GitHub Issues](https://github.com/yourusername/repo/issues) page to report:
+Use the [GitHub Issues](https://github.com/samyak2403/repo/issues) page to report:
 - 🐛 **Bugs**: Unexpected behavior or crashes
 - 💡 **Feature Requests**: New functionality suggestions
 - 📖 **Documentation**: Improvements to guides and docs
@@ -537,12 +537,12 @@ Special thanks to:
 
 **⭐ Star this repository if you found it helpful!**
 
-**🐛 Found a bug? [Report it here](https://github.com/yourusername/repo/issues)**
+**🐛 Found a bug? [Report it here](https://github.com/samyak2403/repo/issues)**
 
-**💡 Have an idea? [Share it with us](https://github.com/yourusername/repo/discussions)**
+**💡 Have an idea? [Share it with us](https://github.com/samyak2403/repo/discussions)**
 
 ---
 
-*Made with ❤️ by [Samyak D Kambe](https://github.com/samyakdkambe)*
+*Made with ❤️ by [Samyak D Kambe](https://github.com/samyak2403)*
 
 </div>
