@@ -1,23 +1,104 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Base Colors -->
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
-
+    <color name="transparent">#00000000</color>
+    
+    <!-- Modern Primary Color Palette - Deep Purple & Electric Blue -->
+    <color name="primary_50">#F3E5F5</color>
+    <color name="primary_100">#E1BEE7</color>
+    <color name="primary_200">#CE93D8</color>
+    <color name="primary_300">#BA68C8</color>
+    <color name="primary_400">#AB47BC</color>
+    <color name="primary_500">#9C27B0</color>  <!-- Main Primary -->
+    <color name="primary_600">#8E24AA</color>
+    <color name="primary_700">#7B1FA2</color>
+    <color name="primary_800">#6A1B9A</color>
+    <color name="primary_900">#4A148C</color>
+    
+    <!-- Secondary Color Palette - Electric Blue -->
+    <color name="secondary_50">#E3F2FD</color>
+    <color name="secondary_100">#BBDEFB</color>
+    <color name="secondary_200">#90CAF9</color>
+    <color name="secondary_300">#64B5F6</color>
+    <color name="secondary_400">#42A5F5</color>
+    <color name="secondary_500">#2196F3</color>  <!-- Main Secondary -->
+    <color name="secondary_600">#1E88E5</color>
+    <color name="secondary_700">#1976D2</color>
+    <color name="secondary_800">#1565C0</color>
+    <color name="secondary_900">#0D47A1</color>
+    
+    <!-- Accent Colors -->
+    <color name="accent_cyan">#00E5FF</color>
+    <color name="accent_cyan_light">#B3F7FF</color>
+    <color name="accent_purple">#D500F9</color>
+    <color name="accent_pink">#FF1744</color>
+    <color name="accent_orange">#FF6D00</color>
+    <color name="accent_green">#00C853</color>
+    
+    <!-- Surface & Background -->
+    <color name="background_primary">#FAFAFA</color>
+    <color name="background_secondary">#F5F5F5</color>
+    <color name="surface_primary">#FFFFFF</color>
+    <color name="surface_secondary">#F8F9FA</color>
+    <color name="surface_elevated">#FFFFFF</color>
+    
+    <!-- Text Colors -->
+    <color name="text_primary">#212121</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_tertiary">#9E9E9E</color>
+    <color name="text_hint">#BDBDBD</color>
+    <color name="text_on_primary">#FFFFFF</color>
+    <color name="text_on_secondary">#FFFFFF</color>
+    
+    <!-- Status Colors -->
+    <color name="success_green">#4CAF50</color>
+    <color name="warning_orange">#FF9800</color>
+    <color name="error_red">#F44336</color>
+    <color name="info_blue">#2196F3</color>
+    
+    <!-- Mood-based Colors -->
+    <color name="mood_happy">#FFEB3B</color>
+    <color name="mood_sad">#607D8B</color>
+    <color name="mood_excited">#E91E63</color>
+    <color name="mood_calm">#009688</color>
+    <color name="mood_neutral">#9E9E9E</color>
+    
+    <!-- Legacy Colors (for compatibility) -->
     <color name="red_500">#F44336</color>
     <color name="yellow_imdb">#F5C518</color>
     <color name="material_dynamic_neutral20">#E0E0E0</color>
     <color name="material_dynamic_neutral40">#BDBDBD</color>
     <color name="material_dynamic_neutral60">#757575</color>
     <color name="material_dynamic_neutral70">#616161</color>
-
-    <!-- Disney-inspired color palette -->
-    <color name="disney_blue">#1E88E5</color>
+    <color name="material_dynamic_primary40">#9C27B0</color>
+    
+    <!-- Updated Disney-inspired Colors -->
+    <color name="disney_blue">#2196F3</color>
     <color name="disney_blue_dark">#1565C0</color>
-    <color name="disney_purple">#7B1FA2</color>
+    <color name="disney_purple">#9C27B0</color>
     <color name="disney_teal">#00BCD4</color>
-    <color name="disney_pink">#EC407A</color>
+    <color name="disney_pink">#E91E63</color>
     <color name="disney_yellow">#FFC107</color>
-    <color name="disney_background">#F5F8FF</color>
-    <color name="disney_text_primary">#263238</color>
-    <color name="disney_text_secondary">#455A64</color>
+    <color name="disney_background">#FAFAFA</color>
+    <color name="disney_text_primary">#212121</color>
+    <color name="disney_text_secondary">#757575</color>
+    
+    <!-- Gradient Colors -->
+    <color name="gradient_start">#9C27B0</color>
+    <color name="gradient_center">#E91E63</color>
+    <color name="gradient_end">#2196F3</color>
+    
+    <!-- Card & Component Colors -->
+    <color name="card_background">#FFFFFF</color>
+    <color name="card_shadow">#1A000000</color>
+    <color name="divider">#E0E0E0</color>
+    <color name="ripple_color">#1A9C27B0</color>
+    
+    <!-- Dark Mode Colors -->
+    <color name="dark_background">#121212</color>
+    <color name="dark_surface">#1E1E1E</color>
+    <color name="dark_text_primary">#FFFFFF</color>
+    <color name="dark_text_secondary">#AAAAAA</color>
 </resources>

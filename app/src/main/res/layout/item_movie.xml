@@ -1,47 +1,343 @@
 <?xml version="1.0" encoding="utf-8"?>
-<com.google.android.material.card.MaterialCardView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="8dp"
-    app:cardCornerRadius="12dp"
-    app:cardElevation="4dp">
+    android:layout_marginHorizontal="12dp"
+    android:layout_marginVertical="8dp"
+    android:foreground="?android:attr/selectableItemBackground"
+    app:cardBackgroundColor="@color/surface_primary"
+    app:cardCornerRadius="20dp"
+    app:cardElevation="8dp"
+    app:cardUseCompatPadding="true">
 
-    <LinearLayout
+    <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:orientation="vertical">
+        android:padding="16dp">
 
-        <ImageView
-            android:id="@+id/movie_poster"
-            android:layout_width="match_parent"
-            android:layout_height="200dp"
-            android:scaleType="centerCrop"
-            tools:src="@drawable/ic_launcher_foreground" />
+        <!-- Movie Poster with Rounded Corners -->
+        <androidx.cardview.widget.CardView
+            android:id="@+id/poster_card"
+            android:layout_width="100dp"
+            android:layout_height="140dp"
+            app:cardCornerRadius="16dp"
+            app:cardElevation="4dp"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-        <TextView
-            android:id="@+id/movie_title"
-            android:layout_width="match_parent"
+            <ImageView
+                android:id="@+id/movie_poster"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="centerCrop"
+                android:src="@drawable/ic_movie_placeholder"
+                tools:src="@drawable/ic_launcher_foreground" />
+
+            <!-- Genre Badge -->
+            <TextView
+                android:id="@+id/genre_badge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="top|end"
+                android:layout_margin="8dp"
+                android:background="@drawable/rounded_text_background"
+                android:backgroundTint="@color/accent_cyan"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:text="Action"
+                android:textColor="@color/white"
+                android:textSize="10sp"
+                android:textStyle="bold"
+                android:visibility="gone"
+                tools:visibility="visible" />
+        </androidx.cardview.widget.CardView>
+
+        <!-- Movie Information Section -->
+        <LinearLayout
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:ellipsize="end"
-            android:maxLines="2"
-            android:padding="8dp"
-            android:textColor="@color/black"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            tools:text="Movie Title" />
+            android:layout_marginStart="16dp"
+            android:orientation="vertical"
+            app:layout_constraintBottom_toBottomOf="@id/poster_card"
+            app:layout_constraintEnd_toStartOf="@id/rating_section"
+            app:layout_constraintStart_toEndOf="@id/poster_card"
+            app:layout_constraintTop_toTopOf="@id/poster_card">
 
-        <TextView
-            android:id="@+id/movie_year"
-            android:layout_width="match_parent"
+            <!-- Movie Title -->
+            <TextView
+                android:id="@+id/movie_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.App.Headline2"
+                android:textColor="@color/text_primary"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                tools:text="Avengers: Endgame" />
+
+            <!-- Movie Year and Type -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="4dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_calendar"
+                    app:tint="@color/text_secondary" />
+
+                <TextView
+                    android:id="@+id/movie_year"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textAppearance="@style/TextAppearance.App.Body2"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    tools:text="2019" />
+
+                <View
+                    android:layout_width="4dp"
+                    android:layout_height="4dp"
+                    android:layout_marginHorizontal="8dp"
+                    android:background="@drawable/rounded_text_background"
+                    android:backgroundTint="@color/text_tertiary" />
+
+                <TextView
+                    android:id="@+id/movie_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textAppearance="@style/TextAppearance.App.Body2"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="14sp"
+                    tools:text="Movie" />
+            </LinearLayout>
+
+            <!-- Movie Runtime and Genre -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:layout_width="16dp"
+                    android:layout_height="16dp"
+                    android:src="@drawable/ic_movie"
+                    app:tint="@color/primary_500" />
+
+                <TextView
+                    android:id="@+id/movie_runtime"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="6dp"
+                    android:textColor="@color/text_secondary"
+                    android:textSize="12sp"
+                    tools:text="181 min" />
+            </LinearLayout>
+
+            <!-- Mood Match Indicator -->
+            <LinearLayout
+                android:id="@+id/mood_match_section"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/rounded_text_background"
+                android:backgroundTint="@color/primary_50"
+                android:gravity="center_vertical"
+                android:orientation="horizontal"
+                android:paddingHorizontal="8dp"
+                android:paddingVertical="4dp"
+                android:visibility="gone"
+                tools:visibility="visible">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="🎭"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/mood_match_text"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="4dp"
+                    android:text="Perfect match for your mood"
+                    android:textColor="@color/primary_700"
+                    android:textSize="11sp"
+                    android:textStyle="bold" />
+            </LinearLayout>
+        </LinearLayout>
+
+        <!-- Rating and Action Section -->
+        <LinearLayout
+            android:id="@+id/rating_section"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingHorizontal="8dp"
-            android:paddingBottom="8dp"
-            android:textColor="@color/material_dynamic_neutral60"
-            android:textSize="14sp"
-            tools:text="2023" />
+            android:gravity="center"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/poster_card">
 
-    </LinearLayout>
+            <!-- IMDB Rating -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="48dp"
+                android:layout_height="48dp"
+                app:cardBackgroundColor="@color/yellow_imdb"
+                app:cardCornerRadius="24dp"
+                app:cardElevation="4dp">
 
-</com.google.android.material.card.MaterialCardView>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="16dp"
+                        android:layout_height="16dp"
+                        android:src="@drawable/ic_sar"
+                        app:tint="@color/white" />
+
+                    <TextView
+                        android:id="@+id/movie_rating"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="2dp"
+                        android:textColor="@color/white"
+                        android:textSize="10sp"
+                        android:textStyle="bold"
+                        tools:text="8.4" />
+                </LinearLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Favorite Button -->
+            <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/favorite_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/surface_secondary"
+                android:src="@drawable/ic_favorite_border"
+                app:borderWidth="0dp"
+                app:elevation="2dp"
+                app:fabSize="mini"
+                app:rippleColor="@color/ripple_color"
+                app:tint="@color/text_secondary" />
+        </LinearLayout>
+
+        <!-- Bottom Section with Tags -->
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:orientation="vertical"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/poster_card">
+
+            <!-- Genre Tags -->
+            <com.google.android.material.chip.ChipGroup
+                android:id="@+id/genre_chips"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:chipSpacingHorizontal="6dp"
+                app:chipSpacingVertical="4dp"
+                tools:visibility="visible">
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Chip.App.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Action"
+                    android:textSize="10sp"
+                    app:chipBackgroundColor="@color/accent_cyan"
+                    app:chipCornerRadius="12dp"
+                    app:chipMinHeight="24dp"
+                    tools:ignore="HardcodedText" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Chip.App.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Adventure"
+                    android:textSize="10sp"
+                    app:chipBackgroundColor="@color/accent_orange"
+                    app:chipCornerRadius="12dp"
+                    app:chipMinHeight="24dp"
+                    tools:ignore="HardcodedText" />
+
+                <com.google.android.material.chip.Chip
+                    style="@style/Chip.App.Choice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Sci-Fi"
+                    android:textSize="10sp"
+                    app:chipBackgroundColor="@color/accent_purple"
+                    app:chipCornerRadius="12dp"
+                    app:chipMinHeight="24dp"
+                    tools:ignore="HardcodedText" />
+            </com.google.android.material.chip.ChipGroup>
+
+            <!-- Plot Preview -->
+            <TextView
+                android:id="@+id/movie_plot"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ellipsize="end"
+                android:lineSpacingExtra="2dp"
+                android:maxLines="2"
+                android:textAppearance="@style/TextAppearance.App.Body2"
+                android:textColor="@color/text_tertiary"
+                android:textSize="12sp"
+                android:visibility="gone"
+                tools:text="After the devastating events of Avengers: Infinity War, the universe is in ruins. With the help of remaining allies, the Avengers assemble once more..."
+                tools:visibility="visible" />
+
+            <!-- Action Buttons -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:gravity="end"
+                android:orientation="horizontal">
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/watch_trailer_button"
+                    style="@style/Button.App.Secondary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:layout_marginEnd="8dp"
+                    android:text="Trailer"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    app:cornerRadius="18dp"
+                    app:icon="@drawable/ic_movie"
+                    app:iconSize="16dp" />
+
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/view_details_button"
+                    style="@style/Button.App.Primary"
+                    android:layout_width="wrap_content"
+                    android:layout_height="36dp"
+                    android:text="Details"
+                    android:textAllCaps="false"
+                    android:textSize="12sp"
+                    app:cornerRadius="18dp"
+                    app:icon="@drawable/ic_sar"
+                    app:iconSize="16dp" />
+            </LinearLayout>
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.cardview.widget.CardView>

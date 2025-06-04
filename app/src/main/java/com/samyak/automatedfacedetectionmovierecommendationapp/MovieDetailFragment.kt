@@ -117,14 +117,9 @@ class MovieDetailFragment : Fragment() {
         val typeTextView: TextView = view.findViewById(R.id.detail_movie_type)
         val imdbIdTextView: TextView = view.findViewById(R.id.detail_movie_imdb_id)
         val plotTextView: TextView = view.findViewById(R.id.detail_movie_plot)
-        val backButton: ImageButton = view.findViewById(R.id.back_button)
+        val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.toolbar)
         val watchButton: Button = view.findViewById(R.id.watch_button)
         val fabFavorite: FloatingActionButton = view.findViewById(R.id.fab_favorite)
-        
-        val genreCard: CardView = view.findViewById(R.id.genre_card)
-        val creditsCard: CardView = view.findViewById(R.id.credits_card)
-        val additionalInfoCard: CardView = view.findViewById(R.id.additional_info_card)
-        val plotCard: CardView = view.findViewById(R.id.plot_card)
         
         // Find new text views for additional movie details
         val ratingTextView: TextView = view.findViewById(R.id.detail_movie_rating)
@@ -157,10 +152,6 @@ class MovieDetailFragment : Fragment() {
             posterImageView.setImageResource(R.drawable.ic_launcher_foreground)
         }
 
-        genreCard.startAnimation(slideUp)
-        creditsCard.startAnimation(slideUp)
-        additionalInfoCard.startAnimation(slideUp)
-        plotCard.startAnimation(slideUp)
         watchButton.startAnimation(fadeIn)
         
         // Set basic text values
@@ -195,19 +186,12 @@ class MovieDetailFragment : Fragment() {
         // Apply the same pattern to other fields
         if (!movieGenre.isNullOrEmpty() && movieGenre != "N/A") {
             genreTextView.text = movieGenre
-            genreCard.visibility = View.VISIBLE
-        } else {
-            genreCard.visibility = View.GONE
         }
         
         // Director, Writer, Actors
         if (!movieDirector.isNullOrEmpty() && movieDirector != "N/A") {
             directorTextView.text = movieDirector
-            view.findViewById<TextView>(R.id.detail_movie_director_label).visibility = View.VISIBLE
             directorTextView.visibility = View.VISIBLE
-        } else {
-            view.findViewById<TextView>(R.id.detail_movie_director_label).visibility = View.GONE
-            directorTextView.visibility = View.GONE
         }
         
         // Apply similar pattern to other fields
@@ -219,7 +203,7 @@ class MovieDetailFragment : Fragment() {
         plotTextView.text = moviePlot
 
         // Set click listeners
-        backButton.setOnClickListener {
+        toolbar.setNavigationOnClickListener {
             requireActivity().supportFragmentManager.popBackStack()
         }
         
@@ -287,9 +271,7 @@ class MovieDetailFragment : Fragment() {
         val plotTextView: TextView = view.findViewById(R.id.detail_movie_plot)
         val posterImageView: ImageView = view.findViewById(R.id.detail_movie_poster)
         
-        val genreCard: CardView = view.findViewById(R.id.genre_card)
-        val creditsCard: CardView = view.findViewById(R.id.credits_card)
-        val additionalInfoCard: CardView = view.findViewById(R.id.additional_info_card)
+        val toolbar: androidx.appcompat.widget.Toolbar = view.findViewById(R.id.toolbar)
         
         // Find text views for additional movie details
         val ratingTextView: TextView = view.findViewById(R.id.detail_movie_rating)
@@ -343,9 +325,6 @@ class MovieDetailFragment : Fragment() {
         // Genre
         if (!movie.genre.isNullOrEmpty() && movie.genre != "N/A") {
             genreTextView.text = movie.genre
-            genreCard.visibility = View.VISIBLE
-        } else {
-            genreCard.visibility = View.GONE
         }
         
         // Credits section
@@ -354,38 +333,25 @@ class MovieDetailFragment : Fragment() {
         // Director
         if (!movie.director.isNullOrEmpty() && movie.director != "N/A") {
             directorTextView.text = movie.director
-            view.findViewById<TextView>(R.id.detail_movie_director_label).visibility = View.VISIBLE
             directorTextView.visibility = View.VISIBLE
             hasCredits = true
-        } else {
-            view.findViewById<TextView>(R.id.detail_movie_director_label).visibility = View.GONE
-            directorTextView.visibility = View.GONE
         }
         
         // Writer
         if (!movie.writer.isNullOrEmpty() && movie.writer != "N/A") {
             writerTextView.text = movie.writer
-            view.findViewById<TextView>(R.id.detail_movie_writer_label).visibility = View.VISIBLE
             writerTextView.visibility = View.VISIBLE
             hasCredits = true
-        } else {
-            view.findViewById<TextView>(R.id.detail_movie_writer_label).visibility = View.GONE
-            writerTextView.visibility = View.GONE
         }
         
         // Actors
         if (!movie.actors.isNullOrEmpty() && movie.actors != "N/A") {
             actorsTextView.text = movie.actors
-            view.findViewById<TextView>(R.id.detail_movie_actors_label).visibility = View.VISIBLE
             actorsTextView.visibility = View.VISIBLE
             hasCredits = true
-        } else {
-            view.findViewById<TextView>(R.id.detail_movie_actors_label).visibility = View.GONE
-            actorsTextView.visibility = View.GONE
         }
         
-        // Show/hide credits card based on content
-        creditsCard.visibility = if (hasCredits) View.VISIBLE else View.GONE
+        // Credits section is always visible in the new layout
         
         // Additional info section
         var hasAdditionalInfo = false
@@ -397,7 +363,6 @@ class MovieDetailFragment : Fragment() {
             hasAdditionalInfo = true
         } else {
             languageTextView.visibility = View.GONE
-            view.findViewById<TextView>(R.id.detail_movie_language_label)?.visibility = View.GONE
         }
         
         // Country
@@ -407,7 +372,6 @@ class MovieDetailFragment : Fragment() {
             hasAdditionalInfo = true
         } else {
             countryTextView.visibility = View.GONE
-            view.findViewById<TextView>(R.id.detail_movie_country_label)?.visibility = View.GONE
         }
         
         // Awards
@@ -417,23 +381,13 @@ class MovieDetailFragment : Fragment() {
             hasAdditionalInfo = true
         } else {
             awardsTextView.visibility = View.GONE
-            view.findViewById<TextView>(R.id.detail_movie_awards_label)?.visibility = View.GONE
         }
         
-        // Show/hide additional info card based on content
-        additionalInfoCard.visibility = if (hasAdditionalInfo) View.VISIBLE else View.GONE
+        // Additional info section is always visible in the new layout
         
         // Plot
         if (!movie.plot.isNullOrEmpty() && movie.plot != "N/A") {
             plotTextView.text = movie.plot
         }
-        
-        // Apply animations
-        val slideUp = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
-        slideUp.duration = 500
-        
-        genreCard.startAnimation(slideUp)
-        creditsCard.startAnimation(slideUp)
-        additionalInfoCard.startAnimation(slideUp)
     }
 }
