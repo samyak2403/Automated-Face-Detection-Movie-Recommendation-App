@@ -1,6 +1,9 @@
 package com.samyak.automatedfacedetectionmovierecommendationapp
 
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -11,12 +14,22 @@ import android.widget.ImageView
 import android.widget.TextView
 import android.widget.Toast
 import androidx.cardview.widget.CardView
+import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.lifecycleScope
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import com.google.android.material.progressindicator.CircularProgressIndicator
+import kotlinx.coroutines.launch
+import retrofit2.Retrofit
+import retrofit2.converter.gson.GsonConverterFactory
 
 class MovieDetailFragment : Fragment() {
+    
+    private lateinit var retrofit: Retrofit
+    private lateinit var omdbApiService: OmdbApiService
+    private var isFavorite = false
 
     companion object {
         private const val ARG_MOVIE_ID = "movie_id"
@@ -70,6 +83,14 @@ class MovieDetailFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        
+        // Initialize Retrofit
+        retrofit = Retrofit.Builder()
+            .baseUrl("https://www.omdbapi.com")
+            .addConverterFactory(GsonConverterFactory.create())
+            .build()
+            
+        omdbApiService = retrofit.create(OmdbApiService::class.java)
 
         // Get movie data from arguments
         val movieId = arguments?.getString(ARG_MOVIE_ID) ?: ""
@@ -203,12 +224,216 @@ class MovieDetailFragment : Fragment() {
         }
         
         watchButton.setOnClickListener {
-            Toast.makeText(context, "Watch feature coming soon!", Toast.LENGTH_SHORT).show()
+            // Open IMDB page for this movie if ID is available
+            if (movieId.isNotEmpty()) {
+                val imdbUrl = "https://www.imdb.com/title/$movieId/"
+                val intent = Intent(Intent.ACTION_VIEW, Uri.parse(imdbUrl))
+                startActivity(intent)
+            } else {
+                Toast.makeText(context, "Watch feature coming soon!", Toast.LENGTH_SHORT).show()
+            }
         }
         
         fabFavorite.setOnClickListener {
-            fabFavorite.setImageResource(R.drawable.ic_favorite_filled) // Toggle between filled/unfilled
-            Toast.makeText(context, "Added to favorites!", Toast.LENGTH_SHORT).show()
+            isFavorite = !isFavorite
+            if (isFavorite) {
+                fabFavorite.setImageResource(R.drawable.ic_favorite_filled)
+                Toast.makeText(context, "Added to favorites!", Toast.LENGTH_SHORT).show()
+            } else {
+                fabFavorite.setImageResource(R.drawable.ic_favorite_border)
+                Toast.makeText(context, "Removed from favorites!", Toast.LENGTH_SHORT).show()
+            }
         }
+        
+        // If we're missing detailed data, fetch it from the API
+        if (movieId.isNotEmpty() && (moviePlot.isEmpty() || movieGenre.isNullOrEmpty() || movieDirector.isNullOrEmpty())) {
+            fetchMovieDetails(movieId, view)
+        }
+    }
+    
+    private fun fetchMovieDetails(imdbId: String, view: View) {
+        val loadingIndicator = view.findViewById<CircularProgressIndicator>(R.id.loading_indicator) ?: return
+        
+        // Show loading indicator
+        loadingIndicator.visibility = View.VISIBLE
+        
+        // Use lifecycleScope to launch coroutine
+        lifecycleScope.launch {
+            try {
+                val response = omdbApiService.getMovieDetail(imdbId)
+                if (response.isSuccessful && response.body() != null) {
+                    val movie = response.body()!!
+                    updateUI(movie, view)
+                } else {
+                    Log.e("MovieDetailFragment", "Error fetching movie details: ${response.errorBody()?.string()}")
+                    Toast.makeText(context, "Failed to load movie details", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Log.e("MovieDetailFragment", "Exception fetching movie details", e)
+                Toast.makeText(context, "Network error: ${e.message}", Toast.LENGTH_SHORT).show()
+            } finally {
+                // Hide loading indicator
+                loadingIndicator.visibility = View.GONE
+            }
+        }
+    }
+    
+    private fun updateUI(movie: Movie, view: View) {
+        // Find views
+        val titleTextView: TextView = view.findViewById(R.id.detail_movie_title)
+        val yearTextView: TextView = view.findViewById(R.id.detail_movie_year)
+        val typeTextView: TextView = view.findViewById(R.id.detail_movie_type)
+        val imdbIdTextView: TextView = view.findViewById(R.id.detail_movie_imdb_id)
+        val plotTextView: TextView = view.findViewById(R.id.detail_movie_plot)
+        val posterImageView: ImageView = view.findViewById(R.id.detail_movie_poster)
+        
+        val genreCard: CardView = view.findViewById(R.id.genre_card)
+        val creditsCard: CardView = view.findViewById(R.id.credits_card)
+        val additionalInfoCard: CardView = view.findViewById(R.id.additional_info_card)
+        
+        // Find text views for additional movie details
+        val ratingTextView: TextView = view.findViewById(R.id.detail_movie_rating)
+        val runtimeTextView: TextView = view.findViewById(R.id.detail_movie_runtime)
+        val ratedTextView: TextView = view.findViewById(R.id.detail_movie_rated)
+        val genreTextView: TextView = view.findViewById(R.id.detail_movie_genre)
+        val directorTextView: TextView = view.findViewById(R.id.detail_movie_director)
+        val writerTextView: TextView = view.findViewById(R.id.detail_movie_writer)
+        val actorsTextView: TextView = view.findViewById(R.id.detail_movie_actors)
+        val languageTextView: TextView = view.findViewById(R.id.detail_movie_language)
+        val countryTextView: TextView = view.findViewById(R.id.detail_movie_country)
+        val awardsTextView: TextView = view.findViewById(R.id.detail_movie_awards)
+        
+        // Set basic text values
+        titleTextView.text = movie.title
+        yearTextView.text = movie.year
+        typeTextView.text = movie.type
+        imdbIdTextView.text = movie.imdbID
+        
+        // Load poster image with Glide
+        if (movie.poster.isNotEmpty() && movie.poster != "N/A") {
+            Glide.with(this)
+                .load(movie.poster)
+                .transition(DrawableTransitionOptions.withCrossFade())
+                .error(R.drawable.ic_launcher_foreground)
+                .into(posterImageView)
+        }
+        
+        // Set additional text values with null checks
+        if (!movie.imdbRating.isNullOrEmpty() && movie.imdbRating != "N/A") {
+            ratingTextView.text = "${movie.imdbRating}/10"
+            ratingTextView.visibility = View.VISIBLE
+        } else {
+            ratingTextView.visibility = View.GONE
+        }
+        
+        if (!movie.runtime.isNullOrEmpty() && movie.runtime != "N/A") {
+            runtimeTextView.text = movie.runtime
+            runtimeTextView.visibility = View.VISIBLE
+        } else {
+            runtimeTextView.visibility = View.GONE
+        }
+        
+        if (!movie.rated.isNullOrEmpty() && movie.rated != "N/A") {
+            ratedTextView.text = movie.rated
+            ratedTextView.visibility = View.VISIBLE
+        } else {
+            ratedTextView.visibility = View.GONE
+        }
+        
+        // Genre
+        if (!movie.genre.isNullOrEmpty() && movie.genre != "N/A") {
+            genreTextView.text = movie.genre
+            genreCard.visibility = View.VISIBLE
+        } else {
+            genreCard.visibility = View.GONE
+        }
+        
+        // Credits section
+        var hasCredits = false
+        
+        // Director
+        if (!movie.director.isNullOrEmpty() && movie.director != "N/A") {
+            directorTextView.text = movie.director
+            view.findViewById<TextView>(R.id.detail_movie_director_label).visibility = View.VISIBLE
+            directorTextView.visibility = View.VISIBLE
+            hasCredits = true
+        } else {
+            view.findViewById<TextView>(R.id.detail_movie_director_label).visibility = View.GONE
+            directorTextView.visibility = View.GONE
+        }
+        
+        // Writer
+        if (!movie.writer.isNullOrEmpty() && movie.writer != "N/A") {
+            writerTextView.text = movie.writer
+            view.findViewById<TextView>(R.id.detail_movie_writer_label).visibility = View.VISIBLE
+            writerTextView.visibility = View.VISIBLE
+            hasCredits = true
+        } else {
+            view.findViewById<TextView>(R.id.detail_movie_writer_label).visibility = View.GONE
+            writerTextView.visibility = View.GONE
+        }
+        
+        // Actors
+        if (!movie.actors.isNullOrEmpty() && movie.actors != "N/A") {
+            actorsTextView.text = movie.actors
+            view.findViewById<TextView>(R.id.detail_movie_actors_label).visibility = View.VISIBLE
+            actorsTextView.visibility = View.VISIBLE
+            hasCredits = true
+        } else {
+            view.findViewById<TextView>(R.id.detail_movie_actors_label).visibility = View.GONE
+            actorsTextView.visibility = View.GONE
+        }
+        
+        // Show/hide credits card based on content
+        creditsCard.visibility = if (hasCredits) View.VISIBLE else View.GONE
+        
+        // Additional info section
+        var hasAdditionalInfo = false
+        
+        // Language
+        if (!movie.language.isNullOrEmpty() && movie.language != "N/A") {
+            languageTextView.text = movie.language
+            languageTextView.visibility = View.VISIBLE
+            hasAdditionalInfo = true
+        } else {
+            languageTextView.visibility = View.GONE
+            view.findViewById<TextView>(R.id.detail_movie_language_label)?.visibility = View.GONE
+        }
+        
+        // Country
+        if (!movie.country.isNullOrEmpty() && movie.country != "N/A") {
+            countryTextView.text = movie.country
+            countryTextView.visibility = View.VISIBLE
+            hasAdditionalInfo = true
+        } else {
+            countryTextView.visibility = View.GONE
+            view.findViewById<TextView>(R.id.detail_movie_country_label)?.visibility = View.GONE
+        }
+        
+        // Awards
+        if (!movie.awards.isNullOrEmpty() && movie.awards != "N/A") {
+            awardsTextView.text = movie.awards
+            awardsTextView.visibility = View.VISIBLE
+            hasAdditionalInfo = true
+        } else {
+            awardsTextView.visibility = View.GONE
+            view.findViewById<TextView>(R.id.detail_movie_awards_label)?.visibility = View.GONE
+        }
+        
+        // Show/hide additional info card based on content
+        additionalInfoCard.visibility = if (hasAdditionalInfo) View.VISIBLE else View.GONE
+        
+        // Plot
+        if (!movie.plot.isNullOrEmpty() && movie.plot != "N/A") {
+            plotTextView.text = movie.plot
+        }
+        
+        // Apply animations
+        val slideUp = AnimationUtils.loadAnimation(context, android.R.anim.slide_in_left)
+        slideUp.duration = 500
+        
+        genreCard.startAnimation(slideUp)
+        creditsCard.startAnimation(slideUp)
+        additionalInfoCard.startAnimation(slideUp)
     }
 }

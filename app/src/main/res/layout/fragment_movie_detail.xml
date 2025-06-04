@@ -175,7 +175,7 @@
                             android:layout_weight="1"
                             android:textColor="@color/disney_text_secondary"
                             android:textSize="16sp"
-                            android:drawableStart="@drawable/ic_imdb"
+                            android:drawableStart="@drawable/ic_sar"
                             android:drawablePadding="8dp"
                             android:drawableTint="@color/yellow_imdb"
                             tools:text="8.4/10" />
@@ -363,13 +363,35 @@
                         android:orientation="horizontal"
                         android:layout_marginTop="8dp">
                         
+                        <!-- Language section -->
                         <TextView
+                            android:id="@+id/detail_movie_language_label"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:textColor="@color/disney_text_primary"
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:text="Language: " />
+                        
+                        <!-- Country section -->
+                        <TextView
+                            android:id="@+id/detail_movie_country_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/disney_text_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:text="Country: " />
+                        
+                        <!-- Awards section -->
+                        <TextView
+                            android:id="@+id/detail_movie_awards_label"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:textColor="@color/disney_text_primary"
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:text="Awards: " />
                             
                         <TextView
                             android:id="@+id/detail_movie_language"
@@ -496,5 +518,19 @@
         app:tint="@color/white"
         app:borderWidth="0dp"
         app:elevation="8dp" />
+        
+    <!-- Loading Indicator -->
+    <com.google.android.material.progressindicator.CircularProgressIndicator
+        android:id="@+id/loading_indicator"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:indeterminate="true"
+        android:visibility="gone"
+        app:indicatorColor="@color/disney_blue"
+        app:trackColor="@color/white"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
