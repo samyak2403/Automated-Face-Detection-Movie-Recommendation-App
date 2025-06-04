@@ -71,7 +71,7 @@
 
 1. **Clone the Repository**
    ```bash
-   git clone https://github.com/yourusername/Automated-Face-Detection-Movie-Recommendation-App.git
+   git clone https://github.com/samyak2403/Automated-Face-Detection-Movie-Recommendation-App.git
    cd Automated-Face-Detection-Movie-Recommendation-App
    ```
 
