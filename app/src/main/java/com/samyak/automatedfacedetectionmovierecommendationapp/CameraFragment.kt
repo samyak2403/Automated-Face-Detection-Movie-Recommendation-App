@@ -10,6 +10,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import android.widget.Toast
+import androidx.cardview.widget.CardView
+import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.button.MaterialButtonToggleGroup
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.OptIn
@@ -28,6 +30,7 @@ import com.google.mlkit.vision.face.Face
 import com.google.mlkit.vision.face.FaceDetection
 import com.google.mlkit.vision.face.FaceDetector
 import com.google.mlkit.vision.face.FaceDetectorOptions
+import com.samyak.automatedfacedetectionmovierecommendationapp.adapter.MovieCircleAdapter
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
 
@@ -40,6 +43,9 @@ class CameraFragment : Fragment() {
     private lateinit var faceDetector: FaceDetector
     private lateinit var faceMeshOverlay: FaceMeshOverlayView
     private lateinit var modeToggleGroup: MaterialButtonToggleGroup
+    private lateinit var movieRecommendationsCard: CardView
+    private lateinit var movieRecommendationsRecycler: RecyclerView
+    private lateinit var movieCircleAdapter: MovieCircleAdapter
 
     private var lastMoodUpdateTime = 0L
     private val MOOD_UPDATE_INTERVAL = 1000L // Update mood every 1 second
@@ -78,9 +84,15 @@ class CameraFragment : Fragment() {
 
         initializeViews(view)
         setupModeToggle()
+        setupMovieRecommendations()
         initializeFaceDetector()
         initializeCameraExecutor()
         requestCameraPermission()
+        
+        // Observe movie recommendations
+        viewModel.movieRecommendations.observe(viewLifecycleOwner) { movies ->
+            movieCircleAdapter.updateMovies(movies)
+        }
     }
 
     private fun initializeViews(view: View) {
@@ -88,6 +100,8 @@ class CameraFragment : Fragment() {
         moodTextView = view.findViewById(R.id.mood_text)
         faceMeshOverlay = view.findViewById(R.id.face_mesh_overlay)
         modeToggleGroup = view.findViewById(R.id.mode_toggle_group)
+        movieRecommendationsCard = view.findViewById(R.id.movie_recommendations_card)
+        movieRecommendationsRecycler = view.findViewById(R.id.movie_recommendations_recycler)
     }
 
     private fun setupModeToggle() {
@@ -101,6 +115,22 @@ class CameraFragment : Fragment() {
                 updateModeDisplay()
             }
         }
+    }
+
+    private fun setupMovieRecommendations() {
+        // Initialize the adapter with a click handler that navigates to MovieDetailFragment
+        // When a movie is clicked, we use the newInstance method to pass all movie data
+        // This ensures all movie details are properly displayed in the detail view
+        movieCircleAdapter = MovieCircleAdapter(emptyList()) { movie ->
+            // Navigate to movie details when clicked using the newInstance method
+            val movieDetailFragment = MovieDetailFragment.newInstance(movie)
+            
+            parentFragmentManager.beginTransaction()
+                .replace(R.id.fragment_container, movieDetailFragment)
+                .addToBackStack(null)
+                .commit()
+        }
+        movieRecommendationsRecycler.adapter = movieCircleAdapter
     }
 
     private fun initializeFaceDetector() {
@@ -315,6 +345,9 @@ class CameraFragment : Fragment() {
                     }
                     moodTextView.text = "$modeText: ${validFaces.size} face(s) detected\nMood: ${mood.formatMoodText()}"
                     viewModel.updateMood(mood)
+                    
+                    // Show movie recommendations when face is detected
+                    movieRecommendationsCard.visibility = View.VISIBLE
                 }
                 lastMoodUpdateTime = currentTime
             } else {
@@ -324,6 +357,9 @@ class CameraFragment : Fragment() {
                         DetectionMode.FAR_RANGE -> "Far Range"
                     }
                     moodTextView.text = "$modeText: No valid faces detected"
+                    
+                    // Hide movie recommendations when no face is detected
+                    movieRecommendationsCard.visibility = View.GONE
                 }
             }
         }
