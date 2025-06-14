@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
+    id("kotlin-parcelize")
 }
 
 android {
@@ -33,6 +34,9 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        viewBinding = true
+    }
 }
 
 dependencies {
@@ -61,7 +65,8 @@ dependencies {
     implementation("com.google.mlkit:face-detection:16.1.5")
     implementation("com.google.mlkit:face-mesh-detection:16.0.0-beta1")
     implementation("androidx.recyclerview:recyclerview:1.3.2")
-    
+    implementation(libs.androidx.swiperefreshlayout)
+
     // CameraX with latest stable version
     val camerax_version = "1.3.0"
     implementation("androidx.camera:camera-core:${camerax_version}")
@@ -74,11 +79,17 @@ dependencies {
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
     implementation(libs.okhttp3.logging.interceptor)
+    implementation("com.squareup.okhttp3:okhttp:4.11.0")
+    implementation("org.json:json:20230618")
 
     // Glide for image loading
     implementation("com.github.bumptech.glide:glide:4.15.1")
     annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
     implementation(libs.androidx.recyclerview)
+
+    // Coroutines
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
 
     // Testing dependencies
     testImplementation(libs.junit)
@@ -89,9 +100,4 @@ dependencies {
     // ML Kit Common and Play Services
     implementation("com.google.mlkit:common:18.7.0")
     implementation("com.google.android.gms:play-services-mlkit-face-detection:17.1.0")
-    
-    // Add coroutines for async operations
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.7.1")
-//    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-play-services:1.7.1")
-
 }
