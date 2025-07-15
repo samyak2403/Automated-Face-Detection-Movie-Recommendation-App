@@ -1,5 +1,7 @@
 # 🎬 CineMood - AI-Powered Movie Recommendation App
 
+
+
 <div align="center">
 
 ![App Logo](https://img.shields.io/badge/CineMood-AI%20Movie%20Recommendations-purple?style=for-the-badge&logo=android)
